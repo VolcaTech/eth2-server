@@ -41,12 +41,20 @@ function* send(req, res) {
 	throw new BadRequestError('Please provide txHash');
     };    
 
+    const verificationKeystoreData  = req.body.verificationKeystoreData;
+    if (!verificationKeystoreData) {
+	throw new BadRequestError('Please provide verification Keystore Data');
+    };    
+
+    
     const transferParams = {
 	from,
 	phone,
 	txHash,
 	amount,    
-	verificationPubKey
+	verificationPubKey,
+	verificationKeystoreData,
+	status: 0
     }
 
     const transfer = yield TransferService.create(transferParams);

@@ -10,7 +10,7 @@ var TransferSchema = new Schema({
 	type: String,
 	required: true,	
     },
-    txHash: { // sha3(phone, verificationCode)
+    txHash: { // is calculated with sha3(phone, verificationCode)
 	type: String,
 	required: true,
 	unique: true,
@@ -22,6 +22,14 @@ var TransferSchema = new Schema({
     },    
     verificationPubKey: { 
 	type: String,
+	required: true,
+    },
+    verificationKeystoreData: { 
+	type: String,
+	required: true,
+    },
+    status: { 
+	type: Number, // 0 - pending, 1 - closed, 2 - cancelled
 	required: true,
     }
     

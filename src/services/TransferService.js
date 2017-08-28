@@ -8,13 +8,17 @@ function* create(values) {
     return transfer;
 }
 
-
 function* getTransfers(from) {
     return yield Transfer.find({from});
+}
+
+function* getByTxHash(txHash) {
+    return yield Transfer.findOne({txHash});
 }
 
 
 module.exports = {
     create,
-    getTransfers
+    getTransfers,
+    getByTxHash
 }
