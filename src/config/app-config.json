@@ -3,5 +3,6 @@
     "port" : 8000,
     "mongoose": {
         "uri": "mongodb://localhost/quidverifierproxy"
-    }
+    },
+    "authyApiKey": ""
 }

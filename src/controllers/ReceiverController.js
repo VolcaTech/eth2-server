@@ -1,5 +1,5 @@
 const TransferService = require('../services/TransferService');
-//const TwillioService = require('../services/TwillioService');
+const TwilioService = require('../services/TwilioService');
 
 const log = require('../libs/log')(module);
 const BadRequestError = require('../libs/error').BadRequestError;
@@ -22,6 +22,8 @@ function* claim(req, res) {
     if (!transfer) {
 	throw new BadRequestError('No transfer found!');
     }
+
+    TwilioService.sendSms(phone)
     
     res.json({transfer});
 }
