@@ -18,7 +18,13 @@ module.exports = {
 	    method: 'claim'	    
 	}
     },        
-    '/receiver/confirm': {
+    '/receiver/verify-sms': {
+	'post': {
+	    controller: "ReceiverController",
+	    method: 'verifySms'	    
+	}
+    },
+    '/receiver/confirm-transfer': {
 	'post': {
 	    controller: "ReceiverController",
 	    method: 'confirm'	    

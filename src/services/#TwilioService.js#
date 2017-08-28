@@ -2,9 +2,7 @@ const Promise = require("bluebird");
 const request = require('request');
 const config  = require('./../config/app-config');
 const log  = require('./../libs/log')(module);
-
 const BadRequestError = require('../libs/error').BadRequestError;
-
 const authy = require('authy')(config.get('AUTHY_API_KEY'));
 
 

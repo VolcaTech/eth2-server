@@ -16,9 +16,15 @@ function* getByTxHash(txHash) {
     return yield Transfer.findOne({txHash});
 }
 
+function* updateTransferStatus(txHash, status) {
+    return yield Transfer.findOneAndUpdate({txHash}, {$set: {status}});
+}
+
+
 
 module.exports = {
     create,
     getTransfers,
-    getByTxHash
+    getByTxHash,
+    updateTransferStatus
 }

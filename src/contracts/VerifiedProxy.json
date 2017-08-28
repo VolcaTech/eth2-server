@@ -1,0 +1,261 @@
+  [
+     {
+           "constant": true,
+	         "inputs": [],
+		       "name": "verifier",
+		             "outputs": [
+			             {
+				               "name": "",
+					                 "type": "address"
+							         }
+								       ],
+								             "payable": false,
+									           "type": "function"
+										       },
+										           {
+											         "constant": false,
+												       "inputs": [
+												               {
+													                 "name": "transferId",
+															           "type": "uint256"
+																           }
+																	         ],
+																		       "name": "cancelTransfer",
+																		             "outputs": [
+																			             {
+																				               "name": "",
+																					                 "type": "bool"
+																							         }
+																								       ],
+																								             "payable": false,
+																									           "type": "function"
+																										       },
+																										           {
+																											         "constant": true,
+																												       "inputs": [
+																												               {
+																													                 "name": "to",
+																															           "type": "address"
+																																           },
+																																	           {
+																																		             "name": "v",
+																																			               "type": "uint8"
+																																				               },
+																																					               {
+																																						                 "name": "r",
+																																								           "type": "bytes32"
+																																									           },
+																																										           {
+																																											             "name": "s",
+																																												               "type": "bytes32"
+																																													               }
+																																														             ],
+																																															           "name": "verifySignature",
+																																																         "outputs": [
+																																																	         {
+																																																		           "name": "retAddr",
+																																																			             "type": "address"
+																																																				             }
+																																																					           ],
+																																																						         "payable": false,
+																																																							       "type": "function"
+																																																							           },
+																																																								       {
+																																																								             "constant": false,
+																																																									           "inputs": [
+																																																										           {
+																																																											             "name": "pubKey",
+																																																												               "type": "address"
+																																																													               },
+																																																														               {
+																																																															                 "name": "to",
+																																																																	           "type": "address"
+																																																																		           },
+																																																																			           {
+																																																																				             "name": "v",
+																																																																					               "type": "uint8"
+																																																																						               },
+																																																																							               {
+																																																																								                 "name": "r",
+																																																																										           "type": "bytes32"
+																																																																											           },
+																																																																												           {
+																																																																													             "name": "s",
+																																																																														               "type": "bytes32"
+																																																																															               }
+																																																																																             ],
+																																																																																	           "name": "withdraw",
+																																																																																		         "outputs": [
+																																																																																			         {
+																																																																																				           "name": "",
+																																																																																					             "type": "bool"
+																																																																																						             }
+																																																																																							           ],
+																																																																																								         "payable": false,
+																																																																																									       "type": "function"
+																																																																																									           },
+																																																																																										       {
+																																																																																										             "constant": true,
+																																																																																											           "inputs": [],
+																																																																																												         "name": "getSentTransfersCount",
+																																																																																													       "outputs": [
+																																																																																													               {
+																																																																																														                 "name": "count",
+																																																																																																           "type": "uint256"
+																																																																																																	           }
+																																																																																																		         ],
+																																																																																																			       "payable": false,
+																																																																																																			             "type": "function"
+																																																																																																				         },
+																																																																																																					     {
+																																																																																																					           "constant": true,
+																																																																																																						         "inputs": [
+																																																																																																							         {
+																																																																																																								           "name": "pubKey",
+																																																																																																									             "type": "address"
+																																																																																																										             }
+																																																																																																											           ],
+																																																																																																												         "name": "getTransferByPubKey",
+																																																																																																													       "outputs": [
+																																																																																																													               {
+																																																																																																														                 "name": "id",
+																																																																																																																           "type": "uint256"
+																																																																																																																	           },
+																																																																																																																		           {
+																																																																																																																			             "name": "status",
+																																																																																																																				               "type": "uint256"
+																																																																																																																					               },
+																																																																																																																						               {
+																																																																																																																							                 "name": "from",
+																																																																																																																									           "type": "address"
+																																																																																																																										           },
+																																																																																																																											           {
+																																																																																																																												             "name": "amount",
+																																																																																																																													               "type": "uint256"
+																																																																																																																														               },
+																																																																																																																															               {
+																																																																																																																																                 "name": "blocknumber",
+																																																																																																																																		           "type": "uint256"
+																																																																																																																																			           }
+																																																																																																																																				         ],
+																																																																																																																																					       "payable": false,
+																																																																																																																																					             "type": "function"
+																																																																																																																																						         },
+																																																																																																																																							     {
+																																																																																																																																							           "constant": true,
+																																																																																																																																								         "inputs": [
+																																																																																																																																									         {
+																																																																																																																																										           "name": "transferId",
+																																																																																																																																											             "type": "uint256"
+																																																																																																																																												             }
+																																																																																																																																													           ],
+																																																																																																																																														         "name": "getTransfer",
+																																																																																																																																															       "outputs": [
+																																																																																																																																															               {
+																																																																																																																																																                 "name": "id",
+																																																																																																																																																		           "type": "uint256"
+																																																																																																																																																			           },
+																																																																																																																																																				           {
+																																																																																																																																																					             "name": "status",
+																																																																																																																																																						               "type": "uint256"
+																																																																																																																																																							               },
+																																																																																																																																																								               {
+																																																																																																																																																									                 "name": "from",
+																																																																																																																																																											           "type": "address"
+																																																																																																																																																												           },
+																																																																																																																																																													           {
+																																																																																																																																																														             "name": "amount",
+																																																																																																																																																															               "type": "uint256"
+																																																																																																																																																																               },
+																																																																																																																																																																	               {
+																																																																																																																																																																		                 "name": "blocknumber",
+																																																																																																																																																																				           "type": "uint256"
+																																																																																																																																																																					           }
+																																																																																																																																																																						         ],
+																																																																																																																																																																							       "payable": false,
+																																																																																																																																																																							             "type": "function"
+																																																																																																																																																																								         },
+																																																																																																																																																																									     {
+																																																																																																																																																																									           "constant": true,
+																																																																																																																																																																										         "inputs": [],
+																																																																																																																																																																											       "name": "commission",
+																																																																																																																																																																											             "outputs": [
+																																																																																																																																																																												             {
+																																																																																																																																																																													               "name": "",
+																																																																																																																																																																														                 "type": "uint256"
+																																																																																																																																																																																         }
+																																																																																																																																																																																	       ],
+																																																																																																																																																																																	             "payable": false,
+																																																																																																																																																																																		           "type": "function"
+																																																																																																																																																																																			       },
+																																																																																																																																																																																			           {
+																																																																																																																																																																																				         "constant": true,
+																																																																																																																																																																																					       "inputs": [
+																																																																																																																																																																																					               {
+																																																																																																																																																																																						                 "name": "transferIndex",
+																																																																																																																																																																																								           "type": "uint256"
+																																																																																																																																																																																									           }
+																																																																																																																																																																																										         ],
+																																																																																																																																																																																											       "name": "getSentTransfer",
+																																																																																																																																																																																											             "outputs": [
+																																																																																																																																																																																												             {
+																																																																																																																																																																																													               "name": "id",
+																																																																																																																																																																																														                 "type": "uint256"
+																																																																																																																																																																																																         },
+																																																																																																																																																																																																	         {
+																																																																																																																																																																																																		           "name": "status",
+																																																																																																																																																																																																			             "type": "uint256"
+																																																																																																																																																																																																				             },
+																																																																																																																																																																																																					             {
+																																																																																																																																																																																																						               "name": "from",
+																																																																																																																																																																																																							                 "type": "address"
+																																																																																																																																																																																																									         },
+																																																																																																																																																																																																										         {
+																																																																																																																																																																																																											           "name": "amount",
+																																																																																																																																																																																																												             "type": "uint256"
+																																																																																																																																																																																																													             },
+																																																																																																																																																																																																														             {
+																																																																																																																																																																																																															               "name": "blocknumer",
+																																																																																																																																																																																																																                 "type": "uint256"
+																																																																																																																																																																																																																		         }
+																																																																																																																																																																																																																			       ],
+																																																																																																																																																																																																																			             "payable": false,
+																																																																																																																																																																																																																				           "type": "function"
+																																																																																																																																																																																																																					       },
+																																																																																																																																																																																																																					           {
+																																																																																																																																																																																																																						         "constant": false,
+																																																																																																																																																																																																																							       "inputs": [
+																																																																																																																																																																																																																							               {
+																																																																																																																																																																																																																								                 "name": "pubKey",
+																																																																																																																																																																																																																										           "type": "address"
+																																																																																																																																																																																																																											           }
+																																																																																																																																																																																																																												         ],
+																																																																																																																																																																																																																													       "name": "deposit",
+																																																																																																																																																																																																																													             "outputs": [
+																																																																																																																																																																																																																														             {
+																																																																																																																																																																																																																															               "name": "id",
+																																																																																																																																																																																																																																                 "type": "uint256"
+																																																																																																																																																																																																																																		         }
+																																																																																																																																																																																																																																			       ],
+																																																																																																																																																																																																																																			             "payable": true,
+																																																																																																																																																																																																																																				           "type": "function"
+																																																																																																																																																																																																																																					       },
+																																																																																																																																																																																																																																					           {
+																																																																																																																																																																																																																																						         "inputs": [
+																																																																																																																																																																																																																																							         {
+																																																																																																																																																																																																																																								           "name": "_verifier",
+																																																																																																																																																																																																																																									             "type": "address"
+																																																																																																																																																																																																																																										             },
+																																																																																																																																																																																																																																											             {
+																																																																																																																																																																																																																																												               "name": "_comission",
+																																																																																																																																																																																																																																													                 "type": "uint256"
+																																																																																																																																																																																																																																															         }
+																																																																																																																																																																																																																																																       ],
+																																																																																																																																																																																																																																																             "payable": false,
+																																																																																																																																																																																																																																																	           "type": "constructor"
+																																																																																																																																																																																																																																																		       },
+																																																																																																																																																																																																																																																		           {
+																																																																																																																																																																																																																																																			         "payable": true,
+																																																																																																																																																																																																																																																				       "type": "fallback"
+																																																																																																																																																																																																																																																				           }
+																																																																																																																																																																																																																																																					     ]
