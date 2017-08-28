@@ -1,11 +1,12 @@
 {
   "name": "quid-proxy-server",
   "version": "1.0.0",
+  "scripts": {
+    "start": "node server",
+    "watch": "nodemon server"
+  },
   "description": "",
   "main": "server.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Dobrokhvalov/quid-proxy-server.git"
@@ -21,5 +22,18 @@
   "bugs": {
     "url": "https://github.com/Dobrokhvalov/quid-proxy-server/issues"
   },
-  "homepage": "https://github.com/Dobrokhvalov/quid-proxy-server#readme"
+  "homepage": "https://github.com/Dobrokhvalov/quid-proxy-server#readme",
+  "devDependencies": {
+    "nodemon": "^1.11.0"
+  },
+  "dependencies": {
+    "body-parser": "^1.17.2",
+    "co": "^4.6.0",
+    "express": "^4.15.4",
+    "method-override": "^2.3.9",
+    "morgan": "^1.8.2",
+    "nconf": "^0.8.4",
+    "underscore": "^1.8.3",
+    "winston": "^2.3.1"
+  }
 }

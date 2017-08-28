@@ -1,5 +1,4 @@
 'use strict';
-require('newrelic');
 
 // set up ========================
 const express  = require('express');
@@ -12,7 +11,7 @@ const methodOverride = require('method-override'); // simulate DELETE and PUT (e
 const buildRouter = require('./src/routes');
 
 
-app.use(express.static(__dirname + '/public'));                 // set the static files location /public/img will be /img for users
+//app.use(express.static(__dirname + '/public'));                 // set the static files location /public/img will be /img for users
 
 app.use(morgan('dev'));                                         // log every request to the console
 app.use(bodyParser.urlencoded({'extended':'true'}));            // parse application/x-www-form-urlencoded
