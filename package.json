@@ -1,0 +1,25 @@
+{
+  "name": "quid-proxy-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Dobrokhvalov/quid-proxy-server.git"
+  },
+  "keywords": [
+    "Ethereum",
+    "Quid",
+    "Smart",
+    "Contracts"
+  ],
+  "author": "Dobrokhvalov",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Dobrokhvalov/quid-proxy-server/issues"
+  },
+  "homepage": "https://github.com/Dobrokhvalov/quid-proxy-server#readme"
+}
