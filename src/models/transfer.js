@@ -1,31 +1,33 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-var DishSchema = new Schema({
-    category:    {
+var TransferSchema = new Schema({
+    from: {
 	type: String,
-    	required: true
+	required: true,	
     },
-    name: {
-    	type: String, 
-    	required: true
+    phone: {
+	type: String,
+	required: true,	
     },
-    description: {
-    	type: String, 
+    txHash: { // sha3(phone, verificationCode)
+	type: String,
+	required: true,
+	unique: true,
+	index: true
     },
-    size: {
-    	type: Number, 
-    },
-    price: {
-    	type: Number, 
-	min: 0, 
-	default: 0,
-    	required: true
-    }, 
-    isEveryday: Boolean
-});
+    amount: { 
+	type: Number,
+	required: true,
+    },    
+    verificationPubKey: { 
+	type: String,
+	required: true,
+    }
+    
+}, {timeStamps: true});
 
 
-var Dish = mongoose.model('Dish', DishSchema);
-module.exports = Dish;
-module.exports.Schema = DishSchema;
+var Transfer = mongoose.model('Transfer', TransferSchema);
+module.exports = Transfer;
+module.exports.Schema = TransferSchema;
