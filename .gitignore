@@ -3,3 +3,5 @@
 *~
 #*#
 node_modules/
+src/config/
+src/config/app-config.json
