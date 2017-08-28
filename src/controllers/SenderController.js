@@ -16,6 +16,10 @@ function* getTransfers(req, res) {
 }
 
 function* send(req, res) {
+    log.debug("ind send")
+    log.debug("body: ", req.body)
+    log.debug("params:", req.params)
+    log.debug("query:", req.query)    
     const from = req.body.from;
     if (!from) {
 	throw new BadRequestError('Please provide sender address');

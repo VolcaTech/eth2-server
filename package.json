@@ -31,6 +31,7 @@
     "bluebird": "^3.5.0",
     "body-parser": "^1.17.2",
     "co": "^4.6.0",
+    "ethereumjs-testrpc": "^4.1.1",
     "express": "^4.15.4",
     "method-override": "^2.3.9",
     "mongoose": "^4.11.9",
