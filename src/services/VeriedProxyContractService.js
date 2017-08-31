@@ -22,6 +22,7 @@ Promise.promisifyAll(contractInstance, { suffix: "Promise" });
 function* checkSignature(to, v, r, s, pubKey) {
     let addr;
     try {
+	log.debug(to, v, r, s);
 	addr = yield contractInstance.verifySignaturePromise(to, v, r, s);
 	log.debug("addr:", addr);
     } catch (err)  {
@@ -40,9 +41,13 @@ function* withdraw(to, v, r, s, pubKey) {
     let addr;
     try {
 	const accounts = yield web3.eth.getAccountsPromise();
-	yield web3.personal.unlockAccountPromise(accounts[0], config.get("password"), 3600)
+	yield web3.personal.unlockAccountPromise(accounts[1], config.get("password"), 3600)
 	log.debug({accounts})
-	result = yield contractInstance.withdrawPromise(pubKey, to, v, r, s, {from: accounts[0], gas: 1000000});
+	result = yield contractInstance.withdrawPromise(pubKey, to, v, r, s, {
+	    from: accounts[1],
+	    gas: 1000000,
+	    gasPrice: 2
+	});
 	log.debug("result", result);
 	return result
     } catch (err)  {
