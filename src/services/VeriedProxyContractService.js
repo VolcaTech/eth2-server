@@ -19,35 +19,76 @@ const contractInstance = web3.eth.contract(CONTRACT_ABI).at(CONTRACT_ADDRESS);
 
 Promise.promisifyAll(contractInstance, { suffix: "Promise" });    
 
-function* checkSignature(to, v, r, s, pubKey) {
-    let addr;
+function* checkSignature(transferId, to, v, r, s) {
+    let isCorrect = false;
     try {
 	log.debug(to, v, r, s);
-	addr = yield contractInstance.verifySignaturePromise(to, v, r, s);
-	log.debug("addr:", addr);
+	isCorrect = yield contractInstance.verifyTransferSignaturePromise(transferId, to, v, r, s);
+	log.debug("is correct signature:", isCorrect);
     } catch (err)  {
 	log.error(err);
-	throw new BadRequestError('Error occured while verified signature!');
+	throw new BadRequestError('Error occured while verifying signature!');
     }
 
-    if (addr.toLowerCase() !== pubKey.toLowerCase()) {
+    if (!isCorrect) {
 	throw new BadRequestError('Wrong signature!');
     }
     
     return true;
 }
 
-function* withdraw(to, v, r, s, pubKey) {
-    let addr;
+
+
+
+
+function* getByTransferId(transferId) {
+    function _parseTransfer(data) {
+	return {
+	    id: data[0].toString(),
+	    status: data[1].toNumber(),
+	    from: data[2].toString('hex'),
+	    amount: data[3].toNumber(),
+	    blocknumber: data[4].toNumber()
+	};
+    }
+    
+    const transferData = yield contractInstance.getTransferPromise(transferId);    
+    return _parseTransfer(transferData);
+}
+
+
+function* checkTransferStatusBeforeWithdraw(transferId) {
+    // transfer instance from blockchain
+    const transferBc = yield getByTransferId(transferId)
+    if (!transferBc) {
+	throw new BadRequestError('No transfer found on blockchain!');
+    }
+    
+    if (transferBc.status !== 0) {
+	if (transferBc.status === 1) {
+	    throw new BadRequestError("Transfer has been already received!");
+	} else if (transferBc.status === 2) {
+	    throw new BadRequestError("Transfer can't be received! Transfer has been cancelled" );
+	} else {
+	    throw new BadRequestError("Transfer can't be received! Transfer status: " + transferBc.status);
+	}
+    }
+    return true;
+}
+
+
+function* withdraw(transferId, to, v, r, s) {
+    let result;
     try {
 	//const accounts = yield web3.eth.getAccountsPromise();
 	yield web3.personal.unlockAccountPromise(config.get("ETHEREUM_ACCOUNT_ADDRESS"), config.get("ETHEREUM_ACCOUNT_PASSWORD"), 3600)
-	result = yield contractInstance.withdrawPromise(pubKey, to, v, r, s, {
+	log.debug({transferId,to, v,r,s})
+	result = yield contractInstance.withdrawPromise(transferId, to, v , r, s, {
 	    from: config.get("ETHEREUM_ACCOUNT_ADDRESS"),
-	    gas: 1000000,
-	    gasPrice: 2
+	    gas: 500000,
+	    gasPrice: 4
 	});
-	log.debug("result", result);
+	log.debug("result: ", result);
 	return result
     } catch (err)  {
 	log.error(err);
@@ -60,5 +101,7 @@ function* withdraw(to, v, r, s, pubKey) {
 
 module.exports = {
     checkSignature,
-    withdraw
+    withdraw,
+    getByTransferId,
+    checkTransferStatusBeforeWithdraw
 }

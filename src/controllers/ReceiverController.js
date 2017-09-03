@@ -8,46 +8,27 @@ const BadRequestError = require('../libs/error').BadRequestError;
 
 function* claim(req, res) {
     
-    const txHash = req.body.txHash;
-    if (!txHash) {
-	throw new BadRequestError('Please provide txHash');
+    const transferId = req.body.transferId;
+    if (!transferId) {
+	throw new BadRequestError('Please provide transfer id');
     };
 
-    const phone = req.body.phone;
-    if (!phone) {
-	throw new BadRequestError('Please provide phone');
-    };
-
-    const transfer = yield TransferService.getByTxHash(txHash)
-
-    if (!transfer) {
-	throw new BadRequestError('No transfer found!');
+    // transfer instance from server's database
+    const transferDb = yield TransferService.getByTransferId(transferId)
+    if (!transferDb) {
+	throw new BadRequestError('No transfer found on server!');
     }
-    if (transfer.status !== 0) {
-	if (transfer.status === 1) {
-	    throw new BadRequestError("Transfer has been already received!");
-	} else if (transfer.status === 2) {
-	    throw new BadRequestError("Transfer can't be received! Transfer has been cancelled" );
-	} else {
-	    throw new BadRequestError("Transfer can't be received! Transfer status: " + transfer.status);
-	}
-
-    }
-
     
-    TwilioService.sendSms(phone)
+    yield VeriedProxyContractService.checkTransferStatusBeforeWithdraw(transferId);
+    
+    TwilioService.sendSms(transferDb.phone);
     res.json({success: true});
 }
 
 function* verifySms(req, res) {
-    const txHash = req.body.txHash;
-    if (!txHash) {
-	throw new BadRequestError('Please provide txHash');
-    };
-
-    const phone = req.body.phone;
-    if (!phone) {
-	throw new BadRequestError('Please provide phone');
+    const transferId = req.body.transferId;
+    if (!transferId) {
+	throw new BadRequestError('Please provide transfer Id');
     };
 
     const code = req.body.code;
@@ -55,32 +36,30 @@ function* verifySms(req, res) {
 	throw new BadRequestError('Please provide SMS code');
     };
     
-    const transfer = yield TransferService.getByTxHash(txHash)
+    const transfer = yield TransferService.getByTransferId(transferId)
     if (!transfer) {
-	throw new BadRequestError('No transfer found!');
+	throw new BadRequestError('No transfer found in database!');
     }
-
     
-    yield TwilioService.sendPhoneVerification(phone, code)
+    yield TwilioService.sendPhoneVerification(transfer.phone, code)
 
     res.json({success: true, transfer: transfer});
 }
 
 
 function* confirm(req, res) {
-    const txHash = req.body.txHash;
-    if (!txHash) {
-	throw new BadRequestError('Please provide txHash');
+    const transferId = req.body.transferId;
+    if (!transferId) {
+	throw new BadRequestError('Please provide transferId');
     };
-    const transfer = yield TransferService.getByTxHash(txHash)
+    const transfer = yield TransferService.getByTransferId(transferId)
     if (!transfer) {
-	throw new BadRequestError('No transfer found!');
+	throw new BadRequestError('No transfer found on server!');
     }
 
     const to = req.body.to.toString("hex");
     if (!to) {
 	throw new BadRequestError('Please provide to');
-	
     };
 
     // signature (v,r,s)
@@ -99,23 +78,20 @@ function* confirm(req, res) {
 	throw new BadRequestError('Please provide valid signature (s)');
     };
 
+    yield VeriedProxyContractService.checkTransferStatusBeforeWithdraw(transferId);
+    
     // check that signature is valid    
-    signatureValid = yield VeriedProxyContractService.checkSignature(to, v, r, s,
-								     transfer.verificationPubKey);
+    signatureValid = yield VeriedProxyContractService.checkSignature(transferId,
+								     to, v, r, s);
     if (!signatureValid) {
 	throw new BadRequestError('Signature is not valid');
     };
     
     // send transaction
-    const pendingTxHash = yield VeriedProxyContractService.withdraw(to, v, r, s,
-							     transfer.verificationPubKey);
+    const pendingTxHash = yield VeriedProxyContractService.withdraw(transferId,
+								    to, v, r, s);
 
-    // update status of transfer to closed
-    const updatedTransfer = yield TransferService.updateTransferStatus(txHash, 1)
-
-    yield updatedTransfer.save()
-    
-    res.json({success: true, pendingTxHash, transfer: updatedTransfer})
+    res.json({success: true, pendingTxHash})
 }
 
 
@@ -124,3 +100,4 @@ module.exports = {
     verifySms,
     confirm
 }
+

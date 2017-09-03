@@ -62,7 +62,7 @@ app.use(function(err, req, res, next){
     log.error(err);
     res.status(err.status || 500);
     //log.error('Internal error(%d): %s',res.statusCode,err.message);
-    let message  = "Ошибка на сервере!";
+    let message  = "Server error!";
     log.logFullError(err, req.method, req.url);
     if (err.code === 'EBADCSRFTOKEN') {
 	message = "Неверный CRSF token. Обновите текущую страницу и повторите действие снова.";

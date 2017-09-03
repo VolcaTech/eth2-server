@@ -8,23 +8,14 @@ function* create(values) {
     return transfer;
 }
 
-function* getTransfers(from) {
-    return yield Transfer.find({from});
-}
 
-function* getByTxHash(txHash) {
-    return yield Transfer.findOne({txHash});
-}
-
-function* updateTransferStatus(txHash, status) {
-    return yield Transfer.findOneAndUpdate({txHash}, {$set: {status}});
+function* getByTransferId(transferId) {
+    return yield Transfer.findOne({transferId});
 }
 
 
 
 module.exports = {
     create,
-    getTransfers,
-    getByTxHash,
-    updateTransferStatus
+    getByTransferId,
 }
