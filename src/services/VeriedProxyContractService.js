@@ -85,8 +85,7 @@ function* withdraw(transferId, to, v, r, s) {
 	log.debug({transferId,to, v,r,s})
 	result = yield contractInstance.withdrawPromise(transferId, to, v , r, s, {
 	    from: config.get("ETHEREUM_ACCOUNT_ADDRESS"),
-	    gas: 500000,
-	    gasPrice: 4
+	    gas: 500000
 	});
 	log.debug("result: ", result);
 	return result

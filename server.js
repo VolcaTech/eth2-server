@@ -82,8 +82,11 @@ var options = {
 };
 
 var portNum = config.get('port');
-var server = https.createServer(options, app);
-server.listen(portNum, function(){
+//var server = https.createServer(options, app);
+// server.listen(portNum, function(){
+//     console.log("server is up at /", portNum)
+// });
+app.listen(portNum, function(){
     console.log("server is up at /", portNum)
 });
 
