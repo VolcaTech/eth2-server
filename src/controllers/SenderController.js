@@ -63,7 +63,7 @@ function* send(req, res) {
 
     const transfer = yield TransferService.create(transferParams);
     
-    res.json({transfer: transfer});
+    res.json({success: true, transfer: transfer});
 }
 
 

@@ -23,9 +23,19 @@ function* claim(req, res) {
     if (!transfer) {
 	throw new BadRequestError('No transfer found!');
     }
+    if (transfer.status !== 0) {
+	if (transfer.status === 1) {
+	    throw new BadRequestError("Transfer has been already received!");
+	} else if (transfer.status === 2) {
+	    throw new BadRequestError("Transfer can't be received! Transfer has been cancelled" );
+	} else {
+	    throw new BadRequestError("Transfer can't be received! Transfer status: " + transfer.status);
+	}
 
-    TwilioService.sendSms(phone)
+    }
+
     
+    TwilioService.sendSms(phone)
     res.json({success: true});
 }
 
@@ -50,6 +60,7 @@ function* verifySms(req, res) {
 	throw new BadRequestError('No transfer found!');
     }
 
+    
     yield TwilioService.sendPhoneVerification(phone, code)
 
     res.json({success: true, transfer: transfer});
@@ -69,6 +80,7 @@ function* confirm(req, res) {
     const to = req.body.to.toString("hex");
     if (!to) {
 	throw new BadRequestError('Please provide to');
+	
     };
 
     // signature (v,r,s)
