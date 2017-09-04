@@ -8,7 +8,7 @@ const BadRequestError = require('../libs/error').BadRequestError;
 const authy = require('authy')(config.get('AUTHY_API_KEY'));
 
 
-function sendSms(phone) {
+function sendSms(phone, phoneCode) {
     authy.phones().verification_start(phone, '7', 'sms', function(err, res) {
 	if (err) {
 	    log.error("ERROR within authy: ", err);
@@ -19,14 +19,14 @@ function sendSms(phone) {
     });
 }
 
-function* sendPhoneVerification(phone, code) {
+function* sendPhoneVerification(phone, phoneCode, smsCode) {
     try {
 	let authyPhones = authy.phones();
 	Promise.promisifyAll(authyPhones, {suffix: "Promise"});
 
-	res = yield authyPhones.verification_checkPromise(phone, '7', code)
+	res = yield authyPhones.verification_checkPromise(phone, phoneCode, smsCode)
 	log.debug(res);		
-	log.info("Successfully registered: ", phone);
+	log.info("Successfully registered: ", phoneCode, phone);
     } catch (err) {
 	log.error("Error while confirming SMS code: ", err);
 	throw new BadRequestError('Sms code is wrong!');

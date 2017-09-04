@@ -9,6 +9,11 @@ function* send(req, res) {
     const phone = req.body.phone;
     if (!phone) {
 	throw new BadRequestError('Please provide phone');
+    };
+    
+    const phoneCode = req.body.phoneCode;
+    if (!phoneCode) {
+	throw new BadRequestError('Please provide phone code');
     };    
     
     const transferId = req.body.transferId;
@@ -23,6 +28,7 @@ function* send(req, res) {
     
     const transferParams = {
 	phone,
+	phoneCode
 	transferId,
 	verificationKeystoreData,
     }

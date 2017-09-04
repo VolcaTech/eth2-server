@@ -21,7 +21,7 @@ function* claim(req, res) {
     
     yield VeriedProxyContractService.checkTransferStatusBeforeWithdraw(transferId);
     
-    TwilioService.sendSms(transferDb.phone);
+    TwilioService.sendSms(transferDb.phone, transferDb.phoneCode);
     res.json({success: true});
 }
 
@@ -41,7 +41,7 @@ function* verifySms(req, res) {
 	throw new BadRequestError('No transfer found in database!');
     }
     
-    yield TwilioService.sendPhoneVerification(transfer.phone, code)
+    yield TwilioService.sendPhoneVerification(transfer.phone, transfer.phoneCode, code)
 
     res.json({success: true, transfer: transfer});
 }

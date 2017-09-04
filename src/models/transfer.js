@@ -6,6 +6,10 @@ var TransferSchema = new Schema({
 	type: String,
 	required: true,	
     },
+    phoneCode: {
+	type: String,
+	required: true,	
+    },    
     transferId: { // is calculated with sha3(phone, verificationCode)
 	type: String,
 	required: true,
