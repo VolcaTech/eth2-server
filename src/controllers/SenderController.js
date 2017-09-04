@@ -28,7 +28,7 @@ function* send(req, res) {
     
     const transferParams = {
 	phone,
-	phoneCode
+	phoneCode,
 	transferId,
 	verificationKeystoreData,
     }

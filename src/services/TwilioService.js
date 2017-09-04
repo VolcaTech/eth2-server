@@ -28,7 +28,8 @@ function* sendPhoneVerification(phone, phoneCode, smsCode) {
 	log.debug(res);		
 	log.info("Successfully registered: ", phoneCode, phone);
     } catch (err) {
-	log.error("Error while confirming SMS code: ", err);
+	
+	log.error("Error while confirming SMS code: ", err, {phone, phoneCode, smsCode});
 	throw new BadRequestError('Sms code is wrong!');
     }
     return true;
