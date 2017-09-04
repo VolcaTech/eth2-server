@@ -25,10 +25,6 @@ var allowCrossDomain = function(req, res, next) {
     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
     res.header("Cache-Control", "no-cache");
     res.header("Access-Control-Max-Age", "1728000");
-    // res.header('Access-Control-Allow-Origin', '*');
-    // res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-    // res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    // res.header("Access-Control-Allow-Credentials", "true");
     next();
 }
 
@@ -59,7 +55,6 @@ app.use(function(req, res, next){
 app.use(function(err, req, res, next){
     log.error(err);
     res.status(err.status || 500);
-    //log.error('Internal error(%d): %s',res.statusCode,err.message);
     let message  = "Server error!";
     log.logFullError(err, req.method, req.url);
     if (err.code === 'EBADCSRFTOKEN') {
@@ -75,18 +70,27 @@ app.use(function(err, req, res, next){
 
 
 // listen (start app with node server.js) ======================================
-var options = {
-    //ca: [fs.readFileSync(PATH_TO_BUNDLE_CERT_1), fs.readFileSync(PATH_TO_BUNDLE_CERT_2)],
-    cert: fs.readFileSync(config.get("SSL_CERT")),
-    key: fs.readFileSync(config.get("SSL_CERT_KEY"))
-};
 
-var portNum = config.get('port');
-//var server = https.createServer(options, app);
-// server.listen(portNum, function(){
-//     console.log("server is up at /", portNum)
-// });
-app.listen(portNum, function(){
-    console.log("server is up at /", portNum)
-});
+if (config.get('HTTPS_ON')) {
+// https
+    const options = {
+	ca: [fs.readFileSync(config.get("CA_BUNDLE"))],
+	cert: fs.readFileSync(config.get("CA_CRT")), 
+	key: fs.readFileSync(config.get("SSL_CERT_KEY"))
+    };
+    
+    const server = https.createServer(options, app);
+    server.listen(443, function(){
+	console.log("server is up at /", 443)
+    });
+    
+} else {
+    // http (for local)
+    const portNum = config.get('port');    
+    app.listen(portNum, function(){
+        console.log("server is up at /", portNum)
+    });
+
+}
+
 
