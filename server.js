@@ -41,6 +41,13 @@ app.use('/hello/', function(req, res) {
     res.json({text: "Hello, Ethereum!"});
 });
 
+// redirect to github pages
+app.use('/', function(req, res) {
+    log.debug("redirecting request : ", req.url);
+    res.writeHead(302, {'Location': 'https://eth2phone.github.io'});
+    res.end();
+});
+
 
 // ERROR HANDLING
 app.use(function(req, res, next){
@@ -81,7 +88,17 @@ if (config.get('HTTPS_ON')) {
     
     const server = https.createServer(options, app);
     server.listen(443, function(){
-	console.log("server is up at /", 443)
+	console.log("https server is up at /", 443)
+    });
+
+    // redirect to https
+    app.get('*',function(req,res){
+	res.redirect('https://eth2phone.com'+req.url)
+    })
+
+    const portNum = config.get('port');    
+    app.listen(portNum, function(){
+        console.log("http server is up at /", portNum)
     });
     
 } else {
