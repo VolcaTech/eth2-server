@@ -24,7 +24,7 @@ const _authyPromise = (phone, phoneCode) => {
 
 function* sendSms(phone, phoneCode) {
     try {
-	const res = yield _authyPromise()
+	const res = yield _authyPromise(phone, phoneCode)
     } catch (err) {
 	throw new BadRequestError('Error on sending SMS. Please try again!');
     }
@@ -41,7 +41,7 @@ function* sendPhoneVerification(phone, phoneCode, smsCode) {
 	log.info("Successfully registered: ", phoneCode, phone);
     } catch (err) {
 	log.error("Error while confirming SMS code: ", err, {phone, phoneCode, smsCode});
-	throw new BadRequestError('Sms code is wrong!');
+	throw new BadRequestError('Wrong SMS code!');
     }
     return true;
 }
