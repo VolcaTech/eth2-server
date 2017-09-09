@@ -1,1 +1,1 @@
-# quid-proxy-server
+# Eth to phone Server
