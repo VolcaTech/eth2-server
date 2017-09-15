@@ -47,7 +47,7 @@ function* getByTransferId(transferId) {
 	    id: data[0].toString(),
 	    status: data[1].toNumber(),
 	    from: data[2].toString('hex'),
-	    amount: data[3].toNumber(),
+	    amount: web3.fromWei(data[3], 'ether').toString(10),
 	    blocknumber: data[4].toNumber()
 	};
     }
@@ -73,7 +73,7 @@ function* checkTransferStatusBeforeWithdraw(transferId) {
 	    throw new BadRequestError("Transfer can't be received! Transfer status: " + transferBc.status);
 	}
     }
-    return true;
+    return transferBc;
 }
 
 

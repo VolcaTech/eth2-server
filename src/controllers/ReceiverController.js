@@ -78,7 +78,7 @@ function* confirm(req, res) {
 	throw new BadRequestError('Please provide valid signature (s)');
     };
 
-    yield VeriedProxyContractService.checkTransferStatusBeforeWithdraw(transferId);
+    const transferBc = yield VeriedProxyContractService.checkTransferStatusBeforeWithdraw(transferId);
     
     // check that signature is valid    
     signatureValid = yield VeriedProxyContractService.checkSignature(transferId,
@@ -91,7 +91,7 @@ function* confirm(req, res) {
     const pendingTxHash = yield VeriedProxyContractService.withdraw(transferId,
 								    to, v, r, s);
 
-    res.json({success: true, pendingTxHash})
+    res.json({success: true, pendingTxHash, amount: transferBc.amount })
 }
 
 

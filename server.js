@@ -43,9 +43,10 @@ app.use('/hello/', function(req, res) {
 
 // redirect to github pages
 app.use('/', function(req, res) {
-    log.debug("redirecting request : ", req.url);
-    res.writeHead(302, {'Location': 'https://eth2phone.github.io'});
-    res.end();
+    // log.debug("redirecting request : ", req.url);
+    // res.writeHead(302, {'Location': 'https://eth2phone.github.io'});
+    // res.end();
+    res.redirect('https://eth2phone.github.io'+req.url)
 });
 
 
@@ -93,7 +94,7 @@ if (config.get('HTTPS_ON')) {
 
     // redirect to https
     app.get('*',function(req,res){
-	res.redirect('https://eth2phone.com'+req.url)
+	res.redirect('https://eth2phone.github.io'+req.url)
     })
 
     const portNum = config.get('port');    
