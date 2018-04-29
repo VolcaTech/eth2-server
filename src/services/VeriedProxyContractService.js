@@ -5,10 +5,13 @@ const BadRequestError = require('../libs/error').BadRequestError;
 const config = require("../config/app-config");
 const log  = require('./../libs/log')(module);
 
+
+
 function getWeb3() {
     const web3 = new Web3(new Web3.providers.IpcProvider(process.env['HOME'] + config.get("GETH_LOCATION"), net));
     Promise.promisifyAll(web3.eth, { suffix: "Promise" });
-    Promise.promisifyAll(web3.personal, { suffix: "Promise" });    
+    Promise.promisifyAll(web3.personal, { suffix: "Promise" });
+
     return web3;
 }
 
@@ -81,7 +84,7 @@ function* withdraw(transferId, to, v, r, s) {
     let result;
     try {
 	//const accounts = yield web3.eth.getAccountsPromise();
-	yield web3.personal.unlockAccountPromise(config.get("ETHEREUM_ACCOUNT_ADDRESS"), config.get("ETHEREUM_ACCOUNT_PASSWORD"), 3600)
+	//yield web3.personal.unlockAccountPromise(config.get("ETHEREUM_ACCOUNT_ADDRESS"), config.get("ETHEREUM_ACCOUNT_PASSWORD"));
 	log.debug({transferId,to, v,r,s})
 	result = yield contractInstance.withdrawPromise(transferId, to, v , r, s, {
 	    from: config.get("ETHEREUM_ACCOUNT_ADDRESS"),

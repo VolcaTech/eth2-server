@@ -33,6 +33,7 @@ function* send(req, res) {
 	verificationKeystoreData,
     }
 
+    log.info({transferParams});
     const transfer = yield TransferService.create(transferParams);
     
     res.json({success: true, transfer: transfer});

@@ -13,6 +13,7 @@ function* claim(req, res) {
 	throw new BadRequestError('Please provide transfer id');
     };
 
+    log.info({transferId})
     // transfer instance from server's database
     const transferDb = yield TransferService.getByTransferId(transferId)
     if (!transferDb) {
