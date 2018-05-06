@@ -24,7 +24,7 @@ const _authyPromise = (phone, phoneCode) => {
 
 function* sendSms(phone, phoneCode) {
     try {
-	const res = yield _authyPromise(phone, phoneCode)
+	const res = yield _authyPromise(phone, phoneCode);
     } catch (err) {
 	throw new BadRequestError('Error on sending SMS. Please try again!');
     }

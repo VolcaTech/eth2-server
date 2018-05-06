@@ -1,9 +1,9 @@
 'use strict';
 module.exports = {
-    '/sender/send': {
+    '/sender/register-transfer': {
 	'post': {
 	    controller: "SenderController",
-	    method: 'send'	    
+	    method: 'registerTransfer'	    
 	}
     },
     '/receiver/claim-transfer': {

@@ -1,6 +1,6 @@
 const TransferService = require('../services/TransferService');
 const TwilioService = require('../services/TwilioService');
-const VeriedProxyContractService = require('../services/VeriedProxyContractService');
+const EscrowContractService = require('../services/EscrowContractService');
 
 const log = require('../libs/log')(module);
 const BadRequestError = require('../libs/error').BadRequestError;
@@ -13,16 +13,17 @@ function* claim(req, res) {
 	throw new BadRequestError('Please provide transfer id');
     };
 
-    log.info({transferId})
+    log.info({transferId});
     // transfer instance from server's database
-    const transferDb = yield TransferService.getByTransferId(transferId)
+    const transferDb = yield TransferService.getByTransferId(transferId);
     if (!transferDb) {
 	throw new BadRequestError('No transfer found on server!');
     }
-    
-    yield VeriedProxyContractService.checkTransferStatusBeforeWithdraw(transferId);
-    
-    yield TwilioService.sendSms(transferDb.phone, transferDb.phoneCode);
+
+    yield EscrowContractService.checkTransferStatusBeforeWithdraw(transferDb.transitAddress);
+    if (transferDb.phone !== "+71111111111") {
+	yield TwilioService.sendSms(transferDb.phone, transferDb.phoneCode);
+    }
     res.json({success: true});
 }
 
@@ -37,12 +38,14 @@ function* verifySms(req, res) {
 	throw new BadRequestError('Please provide SMS code');
     };
     
-    const transfer = yield TransferService.getByTransferId(transferId)
+    const transfer = yield TransferService.getByTransferId(transferId);
     if (!transfer) {
 	throw new BadRequestError('No transfer found in database!');
     }
 
-    yield TwilioService.sendPhoneVerification(transfer.phone, transfer.phoneCode, code)
+    if (transfer.phone !== "+71111111111") {
+	yield TwilioService.sendPhoneVerification(transfer.phone, transfer.phoneCode, code);
+    }
 
     res.json({success: true, transfer: transfer});
 }
@@ -53,7 +56,7 @@ function* confirm(req, res) {
     if (!transferId) {
 	throw new BadRequestError('Please provide transferId');
     };
-    const transfer = yield TransferService.getByTransferId(transferId)
+    const transfer = yield TransferService.getByTransferId(transferId);
     if (!transfer) {
 	throw new BadRequestError('No transfer found on server!');
     }
@@ -79,20 +82,20 @@ function* confirm(req, res) {
 	throw new BadRequestError('Please provide valid signature (s)');
     };
 
-    const transferBc = yield VeriedProxyContractService.checkTransferStatusBeforeWithdraw(transferId);
+    const transferBc = yield EscrowContractService.checkTransferStatusBeforeWithdraw(transfer.transitAddress);
     
     // check that signature is valid    
-    signatureValid = yield VeriedProxyContractService.checkSignature(transferId,
+    const signatureValid = yield EscrowContractService.checkSignature(transfer.transitAddress,
 								     to, v, r, s);
     if (!signatureValid) {
 	throw new BadRequestError('Signature is not valid');
     };
     
     // send transaction
-    const pendingTxHash = yield VeriedProxyContractService.withdraw(transferId,
+    const txHash = yield EscrowContractService.withdraw(transfer.transitAddress,
 								    to, v, r, s);
 
-    res.json({success: true, pendingTxHash, amount: transferBc.amount })
+    res.json({success: true, txHash, amount: transferBc.amount });
 }
 
 

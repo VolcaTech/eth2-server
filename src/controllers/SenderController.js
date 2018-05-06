@@ -1,10 +1,9 @@
 const TransferService = require('../services/TransferService');
-
 const log = require('../libs/log')(module);
 const BadRequestError = require('../libs/error').BadRequestError;
 
 
-function* send(req, res) {
+function* registerTransfer(req, res) {
 
     const phone = req.body.phone;
     if (!phone) {
@@ -21,17 +20,23 @@ function* send(req, res) {
 	throw new BadRequestError('Please provide transfer id');
     };    
 
-    const verificationKeystoreData  = req.body.verificationKeystoreData;
-    if (!verificationKeystoreData) {
-	throw new BadRequestError('Please provide verification Keystore Data');
+    const transitKeystore = req.body.transitKeystore;
+    if (!transitKeystore) {
+	throw new BadRequestError('Please provide transit keystore');
     };    
-    
+
+    const transitAddress = req.body.transitAddress;
+    if (!transitAddress) {
+	throw new BadRequestError('Please provide transit address');
+    };    
+
     const transferParams = {
 	phone,
 	phoneCode,
 	transferId,
-	verificationKeystoreData,
-    }
+	transitAddress,
+	transitKeystore
+    };
 
     log.info({transferParams});
     const transfer = yield TransferService.create(transferParams);
@@ -43,5 +48,5 @@ function* send(req, res) {
 
 
 module.exports = {
-   send
+    registerTransfer
 }
