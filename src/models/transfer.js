@@ -8,11 +8,7 @@ var TransferSchema = new Schema({
 	unique: true,
 	index: true
     },    
-    phone: {
-	type: String,
-	required: true,	
-    },
-    phoneCode: {
+    phoneHash: { // is calculated with sha3(phone, transferId, salt)
 	type: String,
 	required: true,	
     },
@@ -23,7 +19,12 @@ var TransferSchema = new Schema({
     transitKeystore: { 
 	type: String,
 	required: true,
-    }
+    },
+    verified: {
+	type: Boolean,
+	default: false,
+	required: true,
+    }	
 }, {timeStamps: true});
 
 
