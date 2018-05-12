@@ -22,6 +22,26 @@ const contractInstance = web3.eth.contract(CONTRACT_ABI).at(CONTRACT_ADDRESS);
 Promise.promisifyAll(contractInstance, { suffix: "Promise" });    
 
 
+function subscribeForPendingEvents() {
+    // log.debug("Subscribing for pending events.");	
+    //var options = {address: CONTRACT_ADDRESS, fromBlock: 'earliest', toBlock: 'earliest'};
+    //var filter = web3.eth.filter(options);
+    var myEvent = contractInstance.LogDeposit({}, {fromBlock: 'pending', toBlock: 'pending'});
+    
+
+    myEvent.watch((error, tx) => {
+	// try { 
+	//     const tx = await web3.eth.getTransactionPromise(txHash);
+	//     if (tx.to === CONTRACT_ADDRESS) {
+	log.debug("GOT PENDING EVENT: ");
+	log.debug(tx);
+	//     }
+	// } catch(err) {
+	//     log.debug(err);
+	// }
+    });
+}
+
 function* getByTransitAddress(transitAddress) {
     function _parseTransfer(data) {
 	return {
@@ -89,5 +109,6 @@ function* withdraw(transitAddress, to, v, r, s) {
 module.exports = {
     checkSignature,
     withdraw,
-    checkTransferStatusBeforeWithdraw
+    checkTransferStatusBeforeWithdraw,
+    subscribeForPendingEvents
 }

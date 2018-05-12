@@ -11,6 +11,7 @@ const methodOverride = require('method-override'); // simulate DELETE and PUT (e
 const buildRouter = require('./src/routes');
 const https = require('https');
 const fs = require('fs');
+const EscrowContractService = require('./src/services/EscrowContractService');
 
 
 app.use(morgan('dev'));                                         // log every request to the console
@@ -79,36 +80,12 @@ app.use(function(err, req, res, next){
 
 // listen (start app with node server.js) ======================================
 
-if (config.get('HTTPS_ON')) {
-// https
-    const options = {
-	ca: [fs.readFileSync(config.get("CA_BUNDLE"))],
-	cert: fs.readFileSync(config.get("CA_CRT")), 
-	key: fs.readFileSync(config.get("SSL_CERT_KEY"))
-    };
-    
-    const server = https.createServer(options, app);
-    server.listen(8001, function(){
-	console.log("https server is up at /", 443)
-    });
+const portNum = config.get('port');    
+app.listen(portNum, function(){
+    console.log("server is up at /", portNum)
+    EscrowContractService.subscribeForPendingEvents();
+});
 
-    // redirect to https
-    app.get('*',function(req,res){
-	res.redirect('https://eth2phone.github.io'+req.url)
-    })
 
-    const portNum = config.get('port');    
-    app.listen(portNum, function(){
-        console.log("http server is up at /", portNum)
-    });
-    
-} else {
-    // http (for local)
-    const portNum = config.get('port');    
-    app.listen(portNum, function(){
-        console.log("server is up at /", portNum)
-    });
-
-}
 
 

@@ -4,32 +4,48 @@ const BadRequestError = require('../libs/error').BadRequestError;
 
 
 function* registerTransfer(req, res) {
+    // request params
+    const {
+	phoneHash,
+	transferId,
+	transitKeystore,
+	transitAddress,
+	senderAddress,
+	amount
+    } = req.body;
 
-    const phoneHash = req.body.phoneHash;
+    // check that needed params are present
     if (!phoneHash) {
 	throw new BadRequestError('Please provide hashed phone - phoneHash');
     };    
     
-    const transferId = req.body.transferId;
     if (!transferId) {
 	throw new BadRequestError('Please provide transfer id');
     };    
 
-    const transitKeystore = req.body.transitKeystore;
     if (!transitKeystore) {
 	throw new BadRequestError('Please provide transit keystore');
     };    
 
-    const transitAddress = req.body.transitAddress;
     if (!transitAddress) {
 	throw new BadRequestError('Please provide transit address');
     };    
 
+    if (!senderAddress) {
+	throw new BadRequestError('Please provide sender address');
+    };    
+
+    if (!amount) {
+	throw new BadRequestError('Please provide amount');
+    };        
+    
     const transferParams = {
 	phoneHash,
 	transferId,
 	transitAddress,
-	transitKeystore
+	transitKeystore,
+	senderAddress,
+	amount
     };
 
     log.info({transferParams});
