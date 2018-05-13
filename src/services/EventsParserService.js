@@ -50,7 +50,7 @@ const subscribeForPendingEvents = () => {
 
 
 const subscribeForMinedDepositEvents = () => {
-    log.debug("Subscribing for mined events.");
+    log.debug("Subscribing for mined deposit events.");
     
     const depositEvent = escrowContract.LogDeposit();
 
@@ -79,9 +79,44 @@ const subscribeForMinedDepositEvents = () => {
 }
 
 
+const subscribeForMinedCancelEvents = () => {
+    log.debug("Subscribing for mined cancel events.");
+    
+    const cancelEvent = escrowContract.LogCancel();
+
+    cancelEvent.watch(async (error, result) => {
+	try {
+	    log.debug("Got mined cancel event");
+	    console.log(result);
+	   	    
+	    const event = {
+		txStatus: 'success',
+		txHash: result.transactionHash,
+		eventName: 'cancel',
+	    };
+	    const transferFilterParams = {
+		senderAddress: result.args.sender,
+		transitAddress: result.args.transitAddress
+	    };
+	    
+
+	    await TransferService.addEvent({
+		transferStatus: 'cancelled',
+		event,
+		transferFilterParams
+	    });
+	    
+	} catch(err) {
+	    log.debug(err);
+	}
+    });
+}
+
+
 const start = () => {
     subscribeForPendingEvents();
-    subscribeForMinedDepositEvents();    
+    subscribeForMinedDepositEvents();
+    subscribeForMinedCancelEvents();        
 }
 
 
