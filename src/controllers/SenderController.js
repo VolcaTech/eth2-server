@@ -40,11 +40,11 @@ function* registerTransfer(req, res) {
     };        
     
     const transferParams = {
-	phoneHash,
-	transferId,
-	transitAddress,
-	transitKeystore,
-	senderAddress,
+	phoneHash: phoneHash.toLowerCase(),
+	transferId: transferId.toLowerCase(),
+	transitAddress: transitAddress.toLowerCase(),
+	senderAddress: senderAddress.toLowerCase(),
+	transitKeystore,	
 	amount
     };
 

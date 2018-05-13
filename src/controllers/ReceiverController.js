@@ -80,7 +80,7 @@ function* verifySms(req, res) {
     transfer.verified = true;
     const result = yield transfer.save();
 
-    res.json({success: true, transfer: transfer});
+    res.json({success: true, transitKeystore: transfer.transitKeystore});
 }
 
 
@@ -137,9 +137,25 @@ function* confirm(req, res) {
 }
 
 
+function* getTransfer(req, res) {
+    const { transferId } = req.params;
+    if (!transferId) {
+	throw new BadRequestError('Please provide transfer id');
+    };
+    
+    const transfer = yield TransferService.getByTransferId(transferId);
+    if (!transfer) {
+	throw new BadRequestError('No transfer found on server.');
+    }
+    
+    res.json({success: true, transfer });    
+}
+    
+
 module.exports = {
     claim,
     verifySms,
-    confirm
+    confirm,
+    getTransfer
 }
 

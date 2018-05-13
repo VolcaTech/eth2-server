@@ -23,5 +23,11 @@ module.exports = {
 	    controller: "ReceiverController",
 	    method: 'confirm'	    
 	}
+    },
+    '/transfers/:transferId': {
+	'get': {
+	    controller: "ReceiverController",
+	    method: 'getTransfer'	    
+	}
     }
 }

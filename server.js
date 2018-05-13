@@ -11,7 +11,7 @@ const methodOverride = require('method-override'); // simulate DELETE and PUT (e
 const buildRouter = require('./src/routes');
 const https = require('https');
 const fs = require('fs');
-const EscrowContractService = require('./src/services/EscrowContractService');
+const EventsParserService = require('./src/services/EventsParserService');
 
 
 app.use(morgan('dev'));                                         // log every request to the console
@@ -82,8 +82,8 @@ app.use(function(err, req, res, next){
 
 const portNum = config.get('port');    
 app.listen(portNum, function(){
-    console.log("server is up at /", portNum)
-    EscrowContractService.subscribeForPendingEvents();
+    console.log("server is up at /", portNum);
+    EventsParserService.start();
 });
 
 

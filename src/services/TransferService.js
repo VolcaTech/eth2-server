@@ -13,9 +13,14 @@ function* getByTransferId(transferId) {
     return yield Transfer.findOne({transferId});
 }
 
+function findOne(params={}) {
+    return Transfer.findOne(params);
+}
+
 
 
 module.exports = {
     create,
     getByTransferId,
+    findOne
 }

@@ -13,7 +13,10 @@ var TransferEventSchema = new Schema({
     txStatus: {
 	type: String,
 	enum: ["pending", "success", "error"]	
-    }    
+    },
+    gasPrice: {
+	type: Number
+    }
 }, {timeStamps: true});
 
 

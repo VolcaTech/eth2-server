@@ -29,11 +29,11 @@ const TransferSchema = new Schema({
     },
     amount: {
 	type: Number,
-	required: true
+	//required: true
     },
     senderAddress: {
 	type: String,
-	required: true
+	//required: true
     },
     events: [TransferEventSchema],
     status: {
@@ -54,6 +54,17 @@ const TransferSchema = new Schema({
 // for faster lookups on blockchain events update
 TransferSchema.index({senderAddress: 1, transitAddress: 1}, {unique: true, name: "SenderTransitAddressIndex"});
 
+// delete sensitive info by default
+TransferSchema.methods.toJSON = function() {
+    var obj = this.toObject();
+    delete obj.transitKeystore;
+    delete obj.verified;
+    delete obj._id;    
+    delete obj.senderAddress;
+    delete obj.transitAddress;
+    delete obj.phoneHash;    
+    return obj;
+}
 
 var Transfer = mongoose.model('Transfer', TransferSchema);
 module.exports = Transfer;
