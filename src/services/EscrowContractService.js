@@ -2,7 +2,6 @@ const Promise = require("bluebird");
 const BadRequestError = require('../libs/error').BadRequestError;
 const config = require("../config/app-config");
 const log  = require('./../libs/log')(module);
-
 const CONTRACT_ABI = require("../contracts/e2pEscrow").abi;
 const web3 = require('../utils/web3');
 
@@ -12,7 +11,7 @@ const contractInstance = web3.eth.contract(CONTRACT_ABI).at(CONTRACT_ADDRESS);
 Promise.promisifyAll(contractInstance, { suffix: "Promise" });    
 
 
-function* getByTransitAddress(transitAddress) {
+const getByTransitAddress = async (transitAddress) => {
     function _parseTransfer(data) {
 	return {
 	    transitAddress: data[0].toString(),
@@ -21,16 +20,16 @@ function* getByTransitAddress(transitAddress) {
 	};
     }
     
-    const transferData = yield contractInstance.getTransferPromise(transitAddress);    
+    const transferData = await contractInstance.getTransferPromise(transitAddress);    
     return _parseTransfer(transferData);
 }
 
 
-function* checkSignature(transitAddress, to, v, r, s) {
+const checkSignature = async (transitAddress, to, v, r, s) => {
     let isCorrect = false;
     try {
 	log.debug(to, v, r, s);
-	isCorrect = yield contractInstance.verifyTransferSignaturePromise(transitAddress, to, v, r, s);
+	isCorrect = await contractInstance.verifyTransferSignaturePromise(transitAddress, to, v, r, s);
 	log.debug("is correct signature:", isCorrect);
     } catch (err)  {
 	log.error(err);
@@ -45,9 +44,9 @@ function* checkSignature(transitAddress, to, v, r, s) {
 }
 
 
-function* checkTransferStatusBeforeWithdraw(transitAddress) {
+const checkTransferStatusBeforeWithdraw = async (transitAddress) => {
     // transfer instance from blockchain
-    const transferBc = yield getByTransitAddress(transitAddress);
+    const transferBc = await getByTransitAddress(transitAddress);
 
     // if no transfer in blockchain or no amount for transfer set
     if (!(transferBc && transferBc.amount > 0)) {
@@ -57,11 +56,11 @@ function* checkTransferStatusBeforeWithdraw(transitAddress) {
 }
 
 
-function* withdraw(transitAddress, to, v, r, s) {
+const withdraw = async (transitAddress, to, v, r, s) => {
     let result;
     try {
 	log.debug({transitAddress, to, v, r, s});
-	result = yield contractInstance.withdrawPromise(transitAddress, to, v , r, s, {
+	result = await contractInstance.withdrawPromise(transitAddress, to, v , r, s, {
 	    from: config.get("ETHEREUM_ACCOUNT_ADDRESS"),
 	    gas: 100000
 	});

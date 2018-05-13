@@ -1,10 +1,8 @@
 'use strict';
-
-'use strict';
-
 const _ = require('underscore');
 const express = require('express');
-const coAuto = require('../libs/co-auto');
+const asyncHandler = require('express-async-handler');
+
 
 function constructRouter(routesPath) {
 
@@ -18,9 +16,8 @@ function constructRouter(routesPath) {
 	    }
 	    const middleware = [];
 	    middleware.push(method);
-	    {
-		apiRouter[verb](url, coAuto.autoWrapExpress(middleware));
-	    }
+
+	    apiRouter[verb](url, middleware);
 	});
     });
     console.log(routesPath + " router constructed!");

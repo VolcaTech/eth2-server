@@ -8,7 +8,7 @@ const authy = require('authy')(config.get('AUTHY_API_KEY'));
 
 const _authyPromise = (phone, phoneCode) => {
     return new Promise((resolve, reject) => {
-	authy.phones().verification_start(phone, phoneCode, 'sms', function(err, res) {
+	authy.phones().verification_start(phone, phoneCode, 'sms', (err, res) => {
 	    if (err) {
 		log.error("ERROR within authy: ", err);
 		reject(err);
@@ -22,21 +22,20 @@ const _authyPromise = (phone, phoneCode) => {
 }
 
 
-function* sendSms(phone, phoneCode) {
+const sendSms = async (phone, phoneCode) => {
     try {
-	const res = yield _authyPromise(phone, phoneCode);
+	const res = await _authyPromise(phone, phoneCode);
     } catch (err) {
 	throw new BadRequestError('Error on sending SMS. Please try again!');
     }
     return true;
 }
 
-function* sendPhoneVerification(phone, phoneCode, smsCode) {
+const sendPhoneVerification = async (phone, phoneCode, smsCode) => {
     try {
 	let authyPhones = authy.phones();
 	Promise.promisifyAll(authyPhones, {suffix: "Promise"});
-
-	res = yield authyPhones.verification_checkPromise(phone, phoneCode, smsCode)
+	const res = await authyPhones.verification_checkPromise(phone, phoneCode, smsCode);
 	log.debug(res);		
 	log.info("Successfully registered: ", phoneCode, phone);
     } catch (err) {

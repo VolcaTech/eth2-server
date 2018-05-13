@@ -3,15 +3,15 @@ const TwilioService = require('../services/TwilioService');
 const EscrowContractService = require('../services/EscrowContractService');
 const log = require('../libs/log')(module);
 const BadRequestError = require('../libs/error').BadRequestError;
-var Web3Utils = require('web3-utils');
+const Web3Utils = require('web3-utils');
 
 
-function* claim(req, res) {
+const claim = async (req, res) => {
     const { transferId, phone, dialCode, salt } = req.body;
     if (!transferId) {
 	throw new BadRequestError('Please provide transfer id');
     };
-
+    
     if (!phone) {
 	throw new BadRequestError('Please provide phone');	
     }
@@ -26,7 +26,7 @@ function* claim(req, res) {
     
     log.info({transferId});
     // transfer instance from server's database
-    const transferDb = yield TransferService.getByTransferId(transferId);
+    const transferDb = await TransferService.getByTransferId(transferId);
     if (!transferDb) {
 	throw new BadRequestError('No transfer found on server.');
     }
@@ -37,14 +37,14 @@ function* claim(req, res) {
     }
     
     
-    yield EscrowContractService.checkTransferStatusBeforeWithdraw(transferDb.transitAddress);
+    await EscrowContractService.checkTransferStatusBeforeWithdraw(transferDb.transitAddress);
     if (phone !== "+71111111111") {
-	yield TwilioService.sendSms(phone, dialCode);
+	await TwilioService.sendSms(phone, dialCode);
     }
     res.json({success: true});
 }
 
-function* verifySms(req, res) {
+const verifySms = async (req, res) => {
     const { transferId, code, phone, dialCode, salt } = req.body;
     if (!transferId) {
 	throw new BadRequestError('Please provide transfer Id');
@@ -62,7 +62,7 @@ function* verifySms(req, res) {
 	throw new BadRequestError('Please provide dial code');	
     }
     
-    const transfer = yield TransferService.getByTransferId(transferId);
+    const transfer = await TransferService.getByTransferId(transferId);
     
     if (!transfer) {
 	throw new BadRequestError('No transfer found in database!');
@@ -74,17 +74,17 @@ function* verifySms(req, res) {
     }
     
     if (phone !== "+71111111111") {
-	yield TwilioService.sendPhoneVerification(phone, dialCode, code);
+	await TwilioService.sendPhoneVerification(phone, dialCode, code);
     }
     // update transfer to be verified
     transfer.verified = true;
-    const result = yield transfer.save();
+    const result = await transfer.save();
 
     res.json({success: true, transitKeystore: transfer.transitKeystore});
 }
 
 
-function* confirm(req, res) {
+const confirm = async (req, res) => {
     let { transferId, receiverAddress } = req.body;
     if (!transferId) {
 	throw new BadRequestError('Please provide transferId');
@@ -111,7 +111,7 @@ function* confirm(req, res) {
 	throw new BadRequestError('Please provide valid signature (s)');
     };
     
-    const transfer = yield TransferService.getByTransferId(transferId);
+    const transfer = await TransferService.getByTransferId(transferId);
     if (!transfer) {
 	throw new BadRequestError('No transfer found on server!');
     }
@@ -120,30 +120,30 @@ function* confirm(req, res) {
 	throw new BadRequestError('Receiver is not verified!');
     }
     
-    const transferBc = yield EscrowContractService.checkTransferStatusBeforeWithdraw(transfer.transitAddress);
+    const transferBc = await EscrowContractService.checkTransferStatusBeforeWithdraw(transfer.transitAddress);
     
     // check that signature is valid    
-    const signatureValid = yield EscrowContractService.checkSignature(transfer.transitAddress,
+    const signatureValid = await EscrowContractService.checkSignature(transfer.transitAddress,
 								     receiverAddress, v, r, s);
     if (!signatureValid) {
 	throw new BadRequestError('Signature is not valid');
     };
     
     // send transaction
-    const txHash = yield EscrowContractService.withdraw(transfer.transitAddress,
+    const txHash = await EscrowContractService.withdraw(transfer.transitAddress,
 								    receiverAddress, v, r, s);
 
     res.json({success: true, txHash, amount: transferBc.amount });
 }
 
 
-function* getTransfer(req, res) {
+const getTransfer = async (req, res) => {
     const { transferId } = req.params;
     if (!transferId) {
 	throw new BadRequestError('Please provide transfer id');
     };
     
-    const transfer = yield TransferService.getByTransferId(transferId);
+    const transfer = await TransferService.getByTransferId(transferId);
     if (!transfer) {
 	throw new BadRequestError('No transfer found on server.');
     }

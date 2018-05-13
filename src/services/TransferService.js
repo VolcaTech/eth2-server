@@ -2,21 +2,21 @@
 const Transfer = require('../models/transfer');
 
 
-function* create(values) {
+const create = async (values) => {
     const transfer = new Transfer(values);
-    yield transfer.save();
+    await transfer.save();
     return transfer;
 }
 
 
-function* getByTransferId(transferId) {
-    return yield Transfer.findOne({transferId});
+const getByTransferId = (transferId) => {
+    return Transfer.findOne({transferId});
 }
 
-function findOne(params={}) {
+
+const findOne = (params={}) => {
     return Transfer.findOne(params);
 }
-
 
 
 module.exports = {

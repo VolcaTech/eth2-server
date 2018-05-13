@@ -3,7 +3,7 @@ const log = require('../libs/log')(module);
 const BadRequestError = require('../libs/error').BadRequestError;
 
 
-function* registerTransfer(req, res) {
+const registerTransfer = async (req, res) => {
     // request params
     const {
 	phoneHash,
@@ -49,7 +49,7 @@ function* registerTransfer(req, res) {
     };
 
     log.info({transferParams});
-    const transfer = yield TransferService.create(transferParams);
+    const transfer = await TransferService.create(transferParams);
     
     res.json({success: true, transfer: transfer});
 }
