@@ -78,4 +78,5 @@ module.exports = {
     checkSignature,
     withdraw,
     checkTransferStatusBeforeWithdraw,
+    contractInstance
 }
