@@ -1,6 +1,5 @@
 const TransferService = require('../services/TransferService');
 const log = require('../libs/log')(module);
-const BadRequestError = require('../libs/error').BadRequestError;
 
 
 const registerTransfer = async (req, res) => {
@@ -16,27 +15,27 @@ const registerTransfer = async (req, res) => {
 
     // check that needed params are present
     if (!phoneHash) {
-	throw new BadRequestError('Please provide hashed phone - phoneHash');
+	throw new Error('Please provide hashed phone - phoneHash');
     };    
     
     if (!transferId) {
-	throw new BadRequestError('Please provide transfer id');
+	throw new Error('Please provide transfer id');
     };    
 
     if (!transitKeystore) {
-	throw new BadRequestError('Please provide transit keystore');
+	throw new Error('Please provide transit keystore');
     };    
 
     if (!transitAddress) {
-	throw new BadRequestError('Please provide transit address');
+	throw new Error('Please provide transit address');
     };    
 
     if (!senderAddress) {
-	throw new BadRequestError('Please provide sender address');
+	throw new Error('Please provide sender address');
     };    
 
     if (!amount) {
-	throw new BadRequestError('Please provide amount');
+	throw new Error('Please provide amount');
     };        
     
     const transferParams = {

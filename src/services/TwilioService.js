@@ -2,7 +2,6 @@ const Promise = require("bluebird");
 const request = require('request');
 const config  = require('./../config/app-config');
 const log  = require('./../libs/log')(module);
-const BadRequestError = require('../libs/error').BadRequestError;
 const authy = require('authy')(config.get('AUTHY_API_KEY'));
 
 
@@ -26,7 +25,7 @@ const sendSms = async (phone, phoneCode) => {
     try {
 	const res = await _authyPromise(phone, phoneCode);
     } catch (err) {
-	throw new BadRequestError('Error on sending SMS. Please try again!');
+	throw new Error('Error on sending SMS. Please try again!');
     }
     return true;
 }
@@ -40,7 +39,7 @@ const sendPhoneVerification = async (phone, phoneCode, smsCode) => {
 	log.info("Successfully registered: ", phoneCode, phone);
     } catch (err) {
 	log.error("Error while confirming SMS code: ", err, {phone, phoneCode, smsCode});
-	throw new BadRequestError('Wrong SMS code!');
+	throw new Error('Wrong SMS code!');
     }
     return true;
 }

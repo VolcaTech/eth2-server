@@ -1,5 +1,4 @@
 const Promise = require("bluebird");
-const BadRequestError = require('../libs/error').BadRequestError;
 const config = require("../config/app-config");
 const log  = require('./../libs/log')(module);
 const CONTRACT_ABI = require("../contracts/e2pEscrow").abi;
@@ -33,11 +32,11 @@ const checkSignature = async (transitAddress, to, v, r, s) => {
 	log.debug("is correct signature:", isCorrect);
     } catch (err)  {
 	log.error(err);
-	throw new BadRequestError('Error occured while verifying signature!');
+	throw new Error('Error occured while verifying signature!');
     }
 
     if (!isCorrect) {
-	throw new BadRequestError('Wrong signature!');
+	throw new Error('Wrong signature!');
     }
     
     return true;
@@ -50,7 +49,7 @@ const checkTransferStatusBeforeWithdraw = async (transitAddress) => {
 
     // if no transfer in blockchain or no amount for transfer set
     if (!(transferBc && transferBc.amount > 0)) {
-	throw new BadRequestError('No pending transfer found on blockchain!');
+	throw new Error('No pending transfer found on blockchain!');
     }    
     return transferBc;
 }
@@ -68,7 +67,7 @@ const withdraw = async (transitAddress, to, v, r, s) => {
 	return result;
     } catch (err)  {
 	log.error(err);
-	throw new BadRequestError('Error occured while making transfer!');
+	throw new Error('Error occured while making transfer!');
     }
     
     return true;

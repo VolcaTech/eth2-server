@@ -15,9 +15,10 @@ function constructRouter(routesPath) {
 		throw new Error(def.method + ' is undefined');
 	    }
 	    const middleware = [];
-	    middleware.push(method);
-
-	    apiRouter[verb](url, middleware);
+	    middleware.push(asyncHandler(method));
+	    {
+		apiRouter[verb](url, middleware);
+	    }
 	});
     });
     console.log(routesPath + " router constructed!");

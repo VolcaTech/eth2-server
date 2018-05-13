@@ -64,15 +64,10 @@ app.use(function(req, res, next){
 app.use(function(err, req, res, next){
     log.error(err);
     res.status(err.status || 500);
-    let message  = "Server error!";
+    let errorMessage  = err.message || "Server error!";
     log.logFullError(err, req.method, req.url);
-    if (err.code === 'EBADCSRFTOKEN') {
-	message = "Неверный CRSF token. Обновите текущую страницу и повторите действие снова.";
-    } else if (err.message && err.name === "BadRequestError") {
-	message = err.message;
-    };
     
-    res.send({ errorMessage: message });
+    res.send({ success: false, errorMessage });
     return;
 });
 
