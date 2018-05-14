@@ -113,10 +113,44 @@ const subscribeForMinedCancelEvents = () => {
 }
 
 
+const subscribeForMinedWithdrawEvents = () => {
+    log.debug("Subscribing for mined cancel events.");
+    
+    const withdrawEvent = escrowContract.LogWithdraw();
+
+    withdrawEvent.watch(async (error, result) => {
+	try {
+	    log.debug("Got mined withdraw event");
+	    console.log(result);
+	   	    
+	    const event = {
+		txStatus: 'success',
+		txHash: result.transactionHash,
+		eventName: 'withdraw',
+	    };
+	    const transferFilterParams = {
+		senderAddress: result.args.sender,
+		transitAddress: result.args.transitAddress
+	    };
+	    
+	    await TransferService.addEvent({
+		transferStatus: 'completed',
+		event,
+		transferFilterParams
+	    });
+	    
+	} catch(err) {
+	    log.debug(err);
+	}
+    });
+}
+
+
 const start = () => {
     subscribeForPendingEvents();
     subscribeForMinedDepositEvents();
-    subscribeForMinedCancelEvents();        
+    subscribeForMinedCancelEvents();
+    subscribeForMinedWithdrawEvents();            
 }
 
 
