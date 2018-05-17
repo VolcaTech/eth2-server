@@ -41,7 +41,7 @@ Load https://eth2phone.github.io/ and use the app.
 
 `./src/services/TransferService` - service for handling interaction with Transfer models stored in MongoDB
 
-`./src/services/EscrowContratService - service for handling interaction with Ethereum blockchain via e2pEscrow Contract.
+`./src/services/EscrowContratService` - service for handling interaction with Ethereum blockchain via e2pEscrow Contract.
 
 
 This repo contains NodeJS server code for handling SMS-authentication. Front-end code + smart-contracts are located in the separate repository - https://github.com/Dobrokhvalov/eth2phone
