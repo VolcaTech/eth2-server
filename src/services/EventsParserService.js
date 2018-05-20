@@ -147,7 +147,7 @@ const subscribeForMinedWithdrawEvents = () => {
 
 
 const start = () => {
-    subscribeForPendingEvents();
+    // subscribeForPendingEvents();
     subscribeForMinedDepositEvents();
     subscribeForMinedCancelEvents();
     subscribeForMinedWithdrawEvents();            

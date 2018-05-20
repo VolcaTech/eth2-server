@@ -29,5 +29,13 @@ module.exports = {
 	    controller: "ReceiverController",
 	    method: 'getTransfer'	    
 	}
-    }
+    },
+    '/transfer-events/add': {
+	'get': {
+	    controller: "TransferEventsController",
+	    method: 'addEvent'	    
+	}
+    },
+
+    
 }
