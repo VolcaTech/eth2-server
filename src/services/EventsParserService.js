@@ -13,7 +13,7 @@ const subscribeForPendingEvents = () => {
     filter.watch( async (error, txHash) => {
 	try { 
 	    const tx = await web3.eth.getTransactionPromise(txHash);
-	    if (tx.to === CONTRACT_ADDRESS) {
+	    if (tx && tx.to === CONTRACT_ADDRESS) {
 
 		const DEPOSIT_SHA3 = '0xf340fa01';
 		
