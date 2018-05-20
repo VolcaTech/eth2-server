@@ -38,6 +38,7 @@
     "mongoose": "^4.11.9",
     "morgan": "^1.8.2",
     "nconf": "^0.8.4",
+    "newrelic": "^4.1.1",
     "underscore": "^1.8.3",
     "web3": "^0.20.1",
     "web3-utils": "^1.0.0-beta.34",
