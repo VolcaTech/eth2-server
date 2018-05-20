@@ -31,7 +31,7 @@ module.exports = {
 	}
     },
     '/transfer-events/add': {
-	'get': {
+	'post': {
 	    controller: "TransferEventsController",
 	    method: 'addEvent'	    
 	}

@@ -14,7 +14,7 @@ const addEvent = async (req, res) => {
 	gasPrice,
 	transferStatus,
 	parserApiKey
-    } = req.params;
+    } = req.body;
 
     if (parserApiKey !== PARSER_API_KEY) {
 	throw new Error("Wrong api key");
