@@ -5,7 +5,7 @@ Sending Ether to a phone number with user verification via SMS.
 Sending ether to mobile phone number. Receiver doesn’t even need to have a wallet, but simply needs to open the web app, follow simple steps and receive ether using one of the possible ways.
 
 ## Demo
-Play with the demo at https://eth2phone.github.io/ . The demo app supports Ropsten and Mainnet networks right now.
+Play with the demo at https://eth2.io/ . The demo app supports Ropsten and Mainnet networks right now.
 
 ## Video: 
 * [Sending demo](https://screencast-o-matic.com/watch/cbQoD1IbCD)
@@ -29,7 +29,7 @@ Play with the demo at https://eth2phone.github.io/ . The demo app supports Rops
 
 ## Running on Ropsten or Mainnet
 Works best with Trust Wallet on mobile. You can also use a browser with Metamask on desktop.
-Load https://eth2phone.github.io/ and use the app.
+Load https://eth2.io/ and use the app.
 
 
 ## Code structure
@@ -44,7 +44,7 @@ Load https://eth2phone.github.io/ and use the app.
 `./src/services/EscrowContratService` - service for handling interaction with Ethereum blockchain via e2pEscrow Contract.
 
 
-This repo contains NodeJS server code for handling SMS-authentication. Front-end code + smart-contracts are located in the separate repository - https://github.com/Dobrokhvalov/eth2phone
+This repo contains NodeJS server code for handling SMS-authentication. Front-end code + smart-contracts are located in the separate repository - https://github.com/eth2phone/eth2phone-dapp
 
 ## License
 MIT Liscense 
