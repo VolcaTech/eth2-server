@@ -136,6 +136,50 @@ const confirm = async (req, res) => {
 }
 
 
+const claimLinkTransfer = async (req, res) => {
+    let { transitAddress, receiverAddress } = req.body;
+    if (!transitAddress) {
+	throw new Error('Please provide transitAddress');
+    };
+
+    receiverAddress = receiverAddress.toString("hex");
+    if (!receiverAddress) {
+	throw new Error('Please provide receiver address');
+    };
+
+    // signature (v,r,s)
+    const v = parseInt(req.body.v,10);
+    if (!v) {
+	throw new Error('Please provide valid signature (v)');
+    };
+
+    const r = req.body.r.toString("hex");
+    if (!r) {
+	throw new Error('Please provide valid signature (r)');
+    };
+
+    const s = req.body.s.toString("hex");
+    if (!s) {
+	throw new Error('Please provide valid signature (s)');
+    };
+
+    const transferBc = await EscrowContractService.checkTransferStatusBeforeWithdraw(transitAddress);
+
+    // check that signature is valid
+    const signatureValid = await EscrowContractService.checkSignature(transitAddress,
+								      receiverAddress, v, r, s);
+    if (!signatureValid) {
+	throw new Error('Signature is not valid');
+    };
+
+    // send transaction
+    const txHash = await EscrowContractService.withdraw(transitAddress,
+							receiverAddress, v, r, s);
+
+    res.json({success: true, txHash, amount: transferBc.amount });
+}
+
+
 const getTransfer = async (req, res) => {
     const { transferId } = req.params;
     if (!transferId) {
@@ -155,6 +199,7 @@ module.exports = {
     claim,
     verifySms,
     confirm,
-    getTransfer
+    getTransfer,
+    claimLinkTransfer
 }
 

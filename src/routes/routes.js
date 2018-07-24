@@ -24,6 +24,12 @@ module.exports = {
 	    method: 'confirm'	    
 	}
     },
+    '/receiver/claim-link-transfer': {
+	'post': {
+	    controller: "ReceiverController",
+	    method: 'claimLinkTransfer'
+	}
+    },
     '/transfers/:transferId': {
 	'get': {
 	    controller: "ReceiverController",
