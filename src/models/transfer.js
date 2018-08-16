@@ -48,11 +48,11 @@ const TransferSchema = new Schema({
 	],
 	default: "inited"
     },
-    transferType: {
+    verificationType: {
 	type: String,
 	enum: [
 	    "phone",
-	    "link",
+	    "none",
 	    "email"
 	]
     }

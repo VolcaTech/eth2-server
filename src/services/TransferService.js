@@ -33,7 +33,7 @@ const findOrCreate = async ({ senderAddress, transitAddress }) => {
 	    senderAddress,
 	    transitAddress,
 	    transferId: `link-${transitAddress}`,
-	    transferType: "link"
+	    verificationType: "none"
 	});
     }
 
