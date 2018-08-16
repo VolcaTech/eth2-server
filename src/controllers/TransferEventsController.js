@@ -20,10 +20,6 @@ const addEvent = async (req, res) => {
 	throw new Error("Wrong api key");
     }
     
-    const transferFilterParams = {
-	senderAddress,
-	transitAddress,
-    };
 
     const event = {
 	txStatus,
@@ -31,8 +27,10 @@ const addEvent = async (req, res) => {
 	eventName,
 	gasPrice
     };
+
+    console.log({event, senderAddress, transitAddress});
     
-    await TransferService.addEvent({transferStatus, event, transferFilterParams });
+    await TransferService.addEvent({transferStatus, event, senderAddress, transitAddress });
     res.json({success: true });    
 }
     

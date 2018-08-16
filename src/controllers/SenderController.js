@@ -44,7 +44,8 @@ const registerTransfer = async (req, res) => {
 	transitAddress: transitAddress.toLowerCase(),
 	senderAddress: senderAddress.toLowerCase(),
 	transitKeystore,	
-	amount
+	amount,
+	transferType: 'phone'
     };
 
     log.info({transferParams});

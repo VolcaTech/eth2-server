@@ -6,13 +6,13 @@ const TransferEventSchema = require('./TransferEvent').Schema;
 const TransferSchema = new Schema({
     transferId: { // is calculated with sha3(phone, verificationCode)
 	type: String,
-	required: true,
-	unique: true,
+	// required: true,
+	// unique: true,
 	index: true
     },    
     phoneHash: { // is calculated with sha3(phone, transferId, salt)
 	type: String,
-	required: true,	
+	// required: true,	
     },
     transitAddress: { // transit address assigned to smart-contract deposit
 	type: String,
@@ -20,7 +20,7 @@ const TransferSchema = new Schema({
     },
     transitKeystore: {	// encrypted transit private key with secret code,
 	type: String,
-	required: true,
+	// required: true,
     },
     verified: { // if sms verification succeeded
 	type: Boolean,
@@ -47,6 +47,14 @@ const TransferSchema = new Schema({
 	    "cancelled" // deposit was cancelled by sender
 	],
 	default: "inited"
+    },
+    transferType: {
+	type: String,
+	enum: [
+	    "phone",
+	    "link",
+	    "email"
+	]
     }
 }, {timeStamps: true});
 

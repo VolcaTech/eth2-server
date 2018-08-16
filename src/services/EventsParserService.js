@@ -10,24 +10,26 @@ const subscribeForMinedDepositEvents = () => {
     log.debug("Subscribing for mined deposit events.");
     
     const depositEvent = escrowContract.LogDeposit();
-
+    
+    
     depositEvent.watch(async (error, result) => {
 	try {
 	    log.debug("Got mined deposit event");
 	    console.log(result);
 	    
-	    const transferFilterParams = {
-		senderAddress: result.args.sender,
-		transitAddress: result.args.transitAddress
-	    };
+	    const senderAddress = result.args.sender;
+	    const transitAddress = result.args.transitAddress;
+	    const amount = web3.fromWei(result.args.amount, 'ether') ;
 	    
 	    const transferStatus = 'deposited';
 	    const eventTxStatus = 'success';
 	    await TransferService.updateTransferEvent({
 		transferStatus,
 		eventTxHash: result.transactionHash,
-		transferFilterParams,
-		eventTxStatus
+		senderAddress,
+		transitAddress,
+		eventTxStatus,
+		amount
 	    });
 	} catch(err) {
 	    log.debug(err);
@@ -51,16 +53,14 @@ const subscribeForMinedCancelEvents = () => {
 		txHash: result.transactionHash,
 		eventName: 'cancel',
 	    };
-	    const transferFilterParams = {
-		senderAddress: result.args.sender,
-		transitAddress: result.args.transitAddress
-	    };
-	    
+	    const senderAddress = result.args.sender;
+	    const transitAddress = result.args.transitAddress;	    
 
 	    await TransferService.addEvent({
 		transferStatus: 'cancelled',
 		event,
-		transferFilterParams
+		senderAddress,
+		transitAddress,
 	    });
 	    
 	} catch(err) {
@@ -85,15 +85,15 @@ const subscribeForMinedWithdrawEvents = () => {
 		txHash: result.transactionHash,
 		eventName: 'withdraw',
 	    };
-	    const transferFilterParams = {
-		senderAddress: result.args.sender,
-		transitAddress: result.args.transitAddress
-	    };
+
+	    const senderAddress = result.args.sender;
+	    const transitAddress = result.args.transitAddress;
 	    
 	    await TransferService.addEvent({
 		transferStatus: 'completed',
 		event,
-		transferFilterParams
+		senderAddress,
+		transitAddress,
 	    });
 	    
 	} catch(err) {

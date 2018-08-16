@@ -17,14 +17,34 @@ const getByTransferId = (transferId) => {
 
 const findOne = (params={}) => {
     return Transfer.findOne(params);
+    
 }
 
 
-const addEvent = async ({transferStatus, event, transferFilterParams }) => {
+const findOrCreate = async ({ senderAddress, transitAddress }) => {
 
-    // find transfer in db
-    const transfer = await findOne(transferFilterParams);
+   // find transfer in db
+    let transfer = await findOne({senderAddress, transitAddress});
 
+    // create transfer from pending tx, when transfer is sent using special link
+    if (!transfer) {
+	console.log("creating transfer from pending tx...");
+	transfer = await create({
+	    senderAddress,
+	    transitAddress,
+	    transferId: `link-${transitAddress}`,
+	    transferType: "link"
+	});
+    }
+
+    console.log({transfer});
+    return transfer;
+}
+
+const addEvent = async ({transferStatus, event, senderAddress, transitAddress }) => {
+
+    const transfer = await findOrCreate({senderAddress, transitAddress}); 
+    
     // update transfer status in db and add event
     transfer.events.push(event);
     transfer.status = transferStatus;
@@ -32,10 +52,11 @@ const addEvent = async ({transferStatus, event, transferFilterParams }) => {
 }
 
 
-const updateTransferEvent = async ({ transferStatus, eventTxHash, eventTxStatus, transferFilterParams }) => {
+const updateTransferEvent = async ({ transferStatus, eventTxHash, eventTxStatus, senderAddress, transitAddress, amount=null }) => {
     
     // find transfer in db
-    const transfer = await findOne(transferFilterParams);
+    const transfer = await findOrCreate({senderAddress, transitAddress}); 
+
     // update event status 
     transfer.events = transfer.events.map(event => {
 	if (event.txHash === eventTxHash) {
@@ -44,6 +65,11 @@ const updateTransferEvent = async ({ transferStatus, eventTxHash, eventTxStatus,
 	return event;
     });
     transfer.status = transferStatus;
+
+    if (amount) {
+	transfer.amount = amount;
+    }
+    
     await transfer.save();
 }
 
