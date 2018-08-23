@@ -1,8 +1,8 @@
-# Eth2Phone
-Eth2Phone DApp allows you to send ether to anyone simply identifying them by SMS verification.
+# Eth2 (Server)
+Eth2 App allows you to send Ether or tokens to anyone simply by links.
 
 ## Overview
-Eth2Phone allows to send ether to anyone even without Ethereum wallet. The receiver will get the special link and be verified using phone number. The only requirement for you as a sender to have the Web3 compatible Ethereum wallet with sufficient balance and the phone number of the person you are willing to send ether to. You will need to share a special message with the receiver with the link containing all the instructions, following which he or she will download the wallet (or use existing one) and receive assets to it.
+Eth2 allows to send ether to anyone even without Ethereum wallet. The receiver will get the special link and be verified using phone number. The only requirement for you as a sender to have the Web3 compatible Ethereum wallet with sufficient balance and the phone number of the person you are willing to send ether to. You will need to share a special message with the receiver with the link containing all the instructions, following which he or she will download the wallet (or use existing one) and receive assets to it.
 
 ## Beta
 You can play with beta at https://eth2.io. The DApp supports Ethereum Main and Ropsten Test networks right now.
