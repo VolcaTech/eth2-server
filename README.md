@@ -43,7 +43,7 @@ Works best with [Trust Wallet](http://trustwalletapp.com) on mobile. You can als
 `./src/services/EscrowContratService` - service for handling interaction with Ethereum blockchain via e2pEscrow Contract.
 
 
-This repo contains NodeJS server code for handling SMS-authentication. Front-end code + smart-contracts are located in the separate repository - https://github.com/eth2phone/eth2-app
+This repo contains NodeJS server code for handling SMS-authentication. Front-end code + smart-contracts are located in the separate repository - https://github.com/Eth2io/eth2-app
 
 ## License
 MIT Liscense 
