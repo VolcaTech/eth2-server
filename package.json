@@ -33,6 +33,7 @@
     "body-parser": "^1.17.2",
     "co": "^4.6.0",
     "ethereumjs-testrpc": "^4.1.1",
+    "ethers": "^4.0.12",
     "express": "^4.15.4",
     "express-async-handler": "^1.1.3",
     "method-override": "^2.3.9",

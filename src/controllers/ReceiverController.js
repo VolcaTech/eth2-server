@@ -173,7 +173,7 @@ const claimLinkTransfer = async (req, res) => {
     };
 
     // send transaction
-    const txHash = await EscrowContractService.withdraw(transitAddress,
+    const {hash: txHash} = await EscrowContractService.withdraw(transitAddress,
 							receiverAddress, v, r, s);
 
     res.json({success: true, txHash, amount: transferBc.amount });
@@ -188,7 +188,7 @@ const getTransfer = async (req, res) => {
     
     const transfer = await TransferService.getByTransferId(transferId);
     if (!transfer) {
-	throw new Error('No transfer found on server.');
+	throw new Error('No transfer found on server. ' + transferId);
     }
     
     res.json({success: true, transfer });    

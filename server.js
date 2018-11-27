@@ -1,7 +1,7 @@
 'use strict';
 
 // set up ========================
-require('newrelic');
+//require('newrelic');
 const express  = require('express');
 const app      = express();                               // create our app w/ express
 const log = require('./src/libs/log')(module);

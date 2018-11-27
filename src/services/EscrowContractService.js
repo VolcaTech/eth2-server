@@ -4,10 +4,14 @@ const log  = require('./../libs/log')(module);
 const CONTRACT_ABI = require("../contracts/e2pEscrow").abi;
 const web3 = require('../utils/web3');
 
+const ethers = require('ethers');
+const provider = ethers.getDefaultProvider(config.get('ETHEREUM_NETWORK'));
+const wallet = new ethers.Wallet(config.get("ETHEREUM_ACCOUNT_PK"), provider);
+
 // init contract
 const CONTRACT_ADDRESS = config.get("ESCROW_CONTRACT_ADDRESS");
-const contractInstance = web3.eth.contract(CONTRACT_ABI).at(CONTRACT_ADDRESS);
-Promise.promisifyAll(contractInstance, { suffix: "Promise" });    
+const contractInstance = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, wallet);
+
 
 
 const getByTransitAddress = async (transitAddress) => {
@@ -15,11 +19,12 @@ const getByTransitAddress = async (transitAddress) => {
 	return {
 	    transitAddress: data[0].toString(),
 	    from: data[1].toString('hex'),
-	    amount: web3.fromWei(data[2], 'ether').toString(10)
+	    amount: ethers.utils.formatEther(data[2])
 	};
     }
     
-    const transferData = await contractInstance.getTransferPromise(transitAddress);    
+    const transferData = await contractInstance.getTransfer(transitAddress);
+    console.log({transferData});
     return _parseTransfer(transferData);
 }
 
@@ -28,7 +33,7 @@ const checkSignature = async (transitAddress, to, v, r, s) => {
     let isCorrect = false;
     try {
 	log.debug(to, v, r, s);
-	isCorrect = await contractInstance.verifyTransferSignaturePromise(transitAddress, to, v, r, s);
+	isCorrect = await contractInstance.verifyTransferSignature(transitAddress, to, v, r, s);
 	log.debug("is correct signature:", isCorrect);
     } catch (err)  {
 	log.error(err);
@@ -59,10 +64,7 @@ const withdraw = async (transitAddress, to, v, r, s) => {
     let result;
     try {
 	log.debug({transitAddress, to, v, r, s});
-	result = await contractInstance.withdrawPromise(transitAddress, to, v , r, s, {
-	    from: config.get("ETHEREUM_ACCOUNT_ADDRESS"),
-	    gas: 100000
-	});
+	result = await contractInstance.withdraw(transitAddress, to, v , r, s);
 	log.debug("result: ", result);
 	return result;
     } catch (err)  {
